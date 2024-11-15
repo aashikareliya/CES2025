@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vital Data Display</title>
+    <style>
+        /* CSS styling for layout */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 30%;
+            height: 30%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .vital-data-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .graph-container {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+        }
+
+        .graph {
+            width: 80px; /* Reduced width */
+            height: 50px; /* Reduced height */
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            border: 1px solid #eea7a7;
+        }
+
+    </style>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h2>Vital Data Display</h2>
+    <!-- ECG Chart -->
+    <div class="vital-data-item">
+        <canvas id="ecgChart" class="graph-container"></canvas>
+    </div>
+    <!-- PPG Chart -->
+    <div class="vital-data-item">
+        <canvas id="ppgChart" class="graph-container"></canvas>
+    </div>
+    <!-- Heart Rate Chart -->
+    <div class="vital-data-item">
+        <canvas id="heartRateChart" class="graph-container"></canvas>
+    </div>
+</div>
+
+<script>
+    // Initialize empty datasets for ECG, PPG, and Heart Rate
+    const ecgData = { labels: [], datasets: [{ label: 'ECG (uV)', data: [], borderColor: 'blue', fill: false }] };
+    const ppgData = { labels: [], datasets: [{ label: 'PPG (AU)', data: [], borderColor: 'green', fill: false }] };
+    const heartRateData = { labels: [], datasets: [{ label: 'Heart Rate (bpm)', data: [], borderColor: 'red', fill: false }] };
+
+    // Chart options for smooth line updates
+    const chartOptions = {
+    responsive: true,
+    animation: false,
+    maintainAspectRatio: false,
+    scales: {
+        x: { display: false },
+        y: { display: false }
+    },
+    elements: {
+        line: {
+            tension: 0.4 // Smooth lines
+        }
+    }
+};
+
+    // Create the charts
+    const ecgChart = new Chart(document.getElementById('ecgChart').getContext('2d'), { type: 'line', data: ecgData, options: chartOptions });
+    const ppgChart = new Chart(document.getElementById('ppgChart').getContext('2d'), { type: 'line', data: ppgData, options: chartOptions });
+    const heartRateChart = new Chart(document.getElementById('heartRateChart').getContext('2d'), { type: 'line', data: heartRateData, options: chartOptions });
+
+    // Fetch and update the data every second
+    setInterval(fetchVitalData, 1000);
+
+    async function fetchVitalData() {
+        try {
+            const response = await fetch('http://localhost:5000/data');
+            const data = await response.json();
+            if (data.length > 0) {
+                const latestData = data[data.length - 1];
+
+                // Get current timestamp
+                const timestamp = new Date().toLocaleTimeString();
+
+                // Add data points to each chart's dataset
+                updateChartData(ecgChart, ecgData, latestData.ecg, timestamp);
+                updateChartData(ppgChart, ppgData, latestData.ppg_red, timestamp);
+                updateChartData(heartRateChart, heartRateData, latestData.heart_rate, timestamp);
+
+                // Limit the number of data points displayed to 20
+                limitChartData(ecgData);
+                limitChartData(ppgData);
+                limitChartData(heartRateData);
+
+                // Update all charts
+                ecgChart.update();
+                ppgChart.update();
+                heartRateChart.update();
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    }
+
+    // Function to update chart data and labels
+    function updateChartData(chart, dataset, value, label) {
+        dataset.labels.push(label);
+        dataset.datasets[0].data.push(parseFloat(value) || 0); // Parse the value to ensure it is a float
+    }
+
+    // Limit the number of data points displayed to 20 for smooth visualization
+    function limitChartData(dataset) {
+        if (dataset.labels.length > 20) {
+            dataset.labels.shift();
+            dataset.datasets[0].data.shift();
+        }
+    }
+</script>
+
+</body>
+</html>
