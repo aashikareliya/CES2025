@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vital Data Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .main-container {
+            display: flex;
+            width: 100%;
+            gap: 10px;
+        }
+        .left-container {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .patient-data-container {
+            background-color: #00b786;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .patient-data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .patient-data-table td {
+            padding: 10px 10px 10px 50px;
+            font-size: 1.2em;
+            color: #333;
+        }
+        .video-container {
+            background-color: #f38c8c;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 620px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .notification-container {
+            background-color: #00b786;
+            height: 80px;
+            padding: 10px 10px 10px 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .notification-box {
+            width: 45%;
+            height: 55px;
+            display: flex;
+            padding: 10px;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #b1b1b1;
+            border-radius: 8px;
+            border: 2px solid #9c9c9c;
+            transition: background-color 0.3s ease;
+        }
+        .vital-container {
+            width: 70%;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: #143a53;
+            padding: 5px 5px 5px 5px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .vital-top-row {
+            display: flex;
+            gap: 20px;
+            padding: 5px;
+        }
+        .temperature-container, .spo2-container {
+            flex: 1;
+            height: 100px;
+            background-color: #284753;
+            border-radius: 8px;
+            text-align: center;
+            padding: 20px;
+            padding-bottom: 20px;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .temperature-container h3, .spo2-container h3 {
+            font-size: 1em;
+        }
+        .temperature-container p, .spo2-container p {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .graph-row {
+            display: flex;
+            height: 210px;
+            width: 115%;
+            align-items: center;
+            gap: 5px;
+        }
+        .graph-container {
+            height: 210px   ;
+            width: 70%;
+            position: relative;
+            background-color: #000;
+            border-radius: 8px;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        .graph-container canvas {
+            width: 100%;
+            height: 300px;
+        }
+        .vital-box {
+            width: 14.5%;
+            height: 200px;
+            background-color: #284753;
+            border-radius: 8px;
+            text-align: center;
+            padding: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+        }
+        .vital-box h3 {
+            font-size: 1.2em;
+            margin: 0;
+        }
+        .vital-box p {
+            font-size: 2em;
+            font-weight: bold;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="main-container">
+    <div class="left-container">
+        <div class="patient-data-container">
+            <table class="patient-data-table">
+                <tr>
+                    <td><strong>Patient ID:</strong></td>
+                    <td>12345</td>
+                    <td><strong>Name:</strong></td>
+                    <td>John Doe</td>
+                </tr>
+                <tr>
+                    <td><strong>Sex:</strong></td>
+                    <td>Male</td>
+                    <td><strong>Age:</strong></td>
+                    <td>45</td>
+                </tr>
+                <tr>
+                    <td><strong>Height:</strong></td>
+                    <td>180 cm</td>
+                    <td><strong>Weight:</strong></td>
+                    <td>75 kg</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="video-container">
+            <video src="combined.mp4" controls autoplay loop></video>
+        </div>
+
+        <div class="notification-container">
+            <div class="notification-box" id="sneezing-box">Sneezing</div>
+            <div class="notification-box" id="coughing-box">Coughing</div>
+        </div>
+    </div>
+
+    <div class="vital-container">
+        <div class="vital-top-row">
+            <div class="temperature-container">
+                <h3>Temperature (°C)</h3>
+                <p id="temperature-value">--</p>
+            </div>
+            <div class="spo2-container">
+                <h3>SpO2 (%)</h3>
+                <p id="spo2-value">--</p>
+            </div>
+        </div>
+
+        <div class="graph-row">
+            <div class="graph-container">
+                <canvas id="ecgChart"></canvas>
+            </div>
+            <div class="vital-box">
+                <h3>ECG (uV)</h3>
+                <p id="ecg-value">--</p>
+            </div>
+        </div>
+
+        <div class="graph-row">
+            <div class="graph-container">
+                <canvas id="ppgChart"></canvas>
+            </div>
+            <div class="vital-box">
+                <h3>PPG (AU)</h3>
+                <p id="ppg-value">--</p>
+            </div>
+        </div>
+
+        <div class="graph-row">
+            <div class="graph-container">
+                <canvas id="heartRateChart"></canvas>
+            </div>
+            <div class="vital-box">
+                <h3>Heart Rate (bpm)</h3>
+                <p id="heartRate-value">--</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize datasets
+    const ecgData = { labels: [''], datasets: [{ data: [0], borderColor: 'green', fill: false }] };
+    const ppgData = { labels: [''], datasets: [{ data: [0], borderColor: 'blue', fill: false }] };
+    const heartRateData = { labels: [''], datasets: [{ data: [0], borderColor: 'red', fill: false }] };
+
+    // Chart options
+    const chartOptions = {
+        responsive: true,
+        animation: false,
+        scales: {
+            x: { display: false },
+            y: { display: false }
+        },
+        elements: { point: { radius: 0 }, line: { tension: 0.1 } },
+        plugins: { legend: { display: false } }
+    };
+
+    // Create charts
+    const ecgChart = new Chart(document.getElementById('ecgChart').getContext('2d'), { type: 'line', data: ecgData, options: chartOptions });
+    const ppgChart = new Chart(document.getElementById('ppgChart').getContext('2d'), { type: 'line', data: ppgData, options: chartOptions });
+    const heartRateChart = new Chart(document.getElementById('heartRateChart').getContext('2d'), { type: 'line', data: heartRateData, options: chartOptions });
+
+    // Fetch and update data
+    setInterval(async () => {
+        try {
+            const response = await fetch('http://localhost:5000/data');
+            const data = await response.json();
+            const latest = data[data.length - 1];
+            
+            // Update placeholders
+            document.getElementById('temperature-value').textContent = latest.temperature || '--';
+            document.getElementById('spo2-value').textContent = latest.SpO2_val || '--';
+            document.getElementById('ecg-value').textContent = latest.ecg || '--';
+            document.getElementById('ppg-value').textContent = latest.ppg_ir || '--';
+            document.getElementById('heartRate-value').textContent = latest.heart_rate || '--';
+
+            // Update chart data
+            updateChartData(ecgChart, ecgData, latest.ecg);
+            updateChartData(ppgChart, ppgData, latest.ppg_red);
+            updateChartData(heartRateChart, heartRateData, latest.heart_rate);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }, 1000);
+
+    function updateChartData(chart, dataset, value) {
+        dataset.labels = [''];
+        dataset.datasets[0].data = [parseFloat(value) || 0];
+        chart.update();
+    }
+</script>
+</body>
+</html>
