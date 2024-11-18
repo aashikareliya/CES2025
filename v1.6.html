@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CES-2025</title>
+    <style>
+        body {
+            font-family: "Times New Roman", Times, serif;
+            margin: 0;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        .main-container {
+            display: flex;
+            width: 100%;
+            gap: 10px;
+        }
+        .left-container {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .patient-data-container {
+            background: linear-gradient(45deg, #005e5e, #00AEA5, #005e5e);
+            padding: 1px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .patient-data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .patient-data-table td {
+            padding: 10px 10px 10px 50px;
+            font-size: 1.2em;
+            color: #333;
+        }
+        .video-container {
+            background-color: #f38c8c;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 644px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .notification-container {
+            background: linear-gradient(45deg,#ff8300, #DDD338, #ff8809);
+            height: 80px;
+            padding: 10px 10px 10px 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .notification-box {
+            width: 45%;
+            height: 55px;
+            display: flex;
+            padding: 10px;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #c8c0c0;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            border: 2px solid #f5f5f5;
+            transition: background-color 0.3s ease;
+        }
+        .vital-container {
+            width: 70%;
+            height: 97%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: #444444;
+            padding: 5px 5px 5px 5px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .vital-top-row {
+            display: flex;
+            gap: 10px;
+            padding: 5px;
+        }
+        .temperature-container, .spo2-container {
+            flex: 1;
+            height: 100px;
+            border-radius: 8px;
+            text-align: center;
+            padding: 20px;
+            padding-bottom: 20px;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .temperature-container {
+            background: linear-gradient(45deg, #fc7c80, #fcb19c);
+        }
+        .spo2-container {
+            background: linear-gradient(45deg, #6fa6fd, #88d7fc);
+        }
+        .temperature-container h3, .spo2-container h3 {
+            font-size: 1em;
+            margin-bottom: 5px;
+        }
+        .temperature-box p, .spo2-box p {
+            font-size: 2em;
+            margin: 0;
+        }
+        .temperature-container p, .spo2-container p {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0;
+        }
+        .graph-row {
+            display: flex;
+            height: 240px;
+            width: 100%;
+            align-items: center;
+            gap: 5px;
+        }
+        .graph-container {
+            height: 225px;
+            gap: 5px;
+            width: 75%;
+            position: relative;
+            background-color: #000;
+            border-radius: 8px;
+            padding: 5px;
+            box-sizing: border-box;
+            background-size: 40px 40px; /* Grid size */
+            background-image: 
+            linear-gradient(to right, rgb(66, 66, 66) 1px, transparent 0.8px), /* Vertical lines */
+            linear-gradient(to bottom, rgb(66, 66, 66) 1px, transparent 0.8px); /* Horizontal lines */
+            background-position: 0px -10px; /* Shift grid 20px down */
+        }
+        .graph-container canvas {
+            width: 100%;
+            height: 300px;
+        }
+        .vital-box {
+            width: 23%;
+            height: 215px;
+            background-color: #284753;
+            border-radius: 8px;
+            text-align: center;
+            padding: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+        }
+        .ecg-box {
+            background: linear-gradient(45deg, #00ad3a, #94f36e); /* Green Gradient */
+        }
+        .ppg-box {
+            background: linear-gradient(45deg, #ffa9e7, #7799d4); /* Blue Gradient */
+        }
+        .heart-rate-box {
+            background: linear-gradient(45deg, #e00202, #eb8585); /* Red Gradient */
+        }
+        .vital-box h3 {
+            font-size: 1.2em;
+            margin: 0;
+        }
+        .vital-box p {
+            font-size: 2em;
+            font-weight: bold;
+        }
+   
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="main-container">
+    <div class="left-container">
+        <div class="patient-data-container">
+            <table class="patient-data-table">
+                <tr>
+                    <td><strong>Patient ID:</strong></td>
+                    <td>12345</td>
+                    <td><strong>Name:</strong></td>
+                    <td>John Doe</td>
+                </tr>
+                <tr>
+                    <td><strong>Sex:</strong></td>
+                    <td>Male</td>
+                    <td><strong>Age:</strong></td>
+                    <td>45</td>
+                </tr>
+                <tr>
+                    <td><strong>Height:</strong></td>
+                    <td>180 cm</td>
+                    <td><strong>Weight:</strong></td>
+                    <td>75 kg</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="video-container">
+            <video src="combined.mp4" controls autoplay loop></video>
+        </div>
+
+        <div class="notification-container">
+            <div class="notification-box" id="sneezing-box">Sneezing</div>
+            <div class="notification-box" id="coughing-box">Coughing</div>
+        </div>
+    </div>
+
+    <div class="vital-container">
+        <div class="vital-top-row">
+            <div class="temperature-container">
+                <h3>Temperature (°C)</h3>
+                <p id="temperature-value">--</p>
+            </div>
+            <div class="spo2-container">
+                <h3>SpO2 (%)</h3>
+                <p id="spo2-value">--</p>
+            </div>
+        </div>
+
+        <div class="graph-row">
+            <div class="graph-container">
+                <canvas id="ecgChart"></canvas>
+            </div>
+            <div class="vital-box ecg-box">
+                <h3>ECG (uV)</h3>
+                <p id="ecg-value">--</p>
+            </div>
+        </div>
+
+        <div class="graph-row">
+            <div class="graph-container">
+                <canvas id="ppgChart"></canvas>
+            </div>
+            <div class="vital-box ppg-box">
+                <h3>PPG (AU)</h3>
+                <p id="ppg-value">--</p>
+            </div>
+        </div>
+
+        <div class="graph-row">
+            <div class="graph-container">
+                <canvas id="heartRateChart"></canvas>
+            </div>
+            <div class="vital-box heart-rate-box">
+                <h3>Heart Rate (bpm)</h3>
+                <p id="heartRate-value">--</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize datasets
+    const ecgData = { labels: [''], datasets: [{ data: [0], borderColor: 'green', fill: false }] };
+    const ppgData = { labels: [''], datasets: [{ data: [0], borderColor: 'blue', fill: false }] };
+    const heartRateData = { labels: [''], datasets: [{ data: [0], borderColor: 'red', fill: false }] };
+
+    // Chart options
+    const chartOptions = {
+        responsive: true,
+        animation: false,
+        scales: {
+            x: { display: false },
+            y: { display: false }
+        },
+        elements: { point: { radius: 0 }, line: { tension: 0.1 } },
+        plugins: { legend: { display: false } }
+    };
+
+    // Create charts
+    const ecgChart = new Chart(document.getElementById('ecgChart').getContext('2d'), { type: 'line', data: ecgData, options: chartOptions });
+    const ppgChart = new Chart(document.getElementById('ppgChart').getContext('2d'), { type: 'line', data: ppgData, options: chartOptions });
+    const heartRateChart = new Chart(document.getElementById('heartRateChart').getContext('2d'), { type: 'line', data: heartRateData, options: chartOptions });
+
+   // Fetch and update data every second
+   setInterval(fetchVitalData, 1000);
+
+async function fetchVitalData() {
+    try {
+        const response = await fetch('http://192.168.6.207:5000/data');
+        const data = await response.json();
+        if (data.length > 0) {
+            const latestData = data[data.length - 1];
+
+            // Update placeholders
+            document.getElementById('temperature-value').textContent = `${latestData.temperature || '--'}`;
+            document.getElementById('spo2-value').textContent = `${latestData.SpO2_val || '--'}`;
+            document.getElementById('ecg-value').textContent = `${latestData.ecg || '--'}`;
+            document.getElementById('ppg-value').textContent = `${latestData.ppg_ir || '--'}`;
+            document.getElementById('heartRate-value').textContent = `${latestData.heart_rate || '--'}`;
+
+            // Update chart data
+            updateChartData(ecgChart, ecgData, latestData.ecg);
+            updateChartData(ppgChart, ppgData, latestData.ppg_ir);
+            updateChartData(heartRateChart, heartRateData, latestData.heart_rate);
+
+            ecgChart.update();
+            ppgChart.update();
+            heartRateChart.update();
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+    }
+    function updateChartData(chart, dataset, value) {
+         dataset.labels.push('');
+         dataset.datasets[0].data.push(parseFloat(value) || 0);
+         if (dataset.labels.length > 100) {
+            dataset.labels.shift();
+            dataset.datasets[0].data.shift();
+         }
+         // Replace existing data with the latest value
+        // dataset.labels = ['']; // Only one label for the latest data point
+        // dataset.datasets[0].data = [parseFloat(value) || 0]; // Only the latest data point
+
+        // chart.update(); // Update the chart
+    }
+
+    // Mock events array (simulating real-time updates)
+    let events = [];
+
+    // Function to check for events and update notification boxes
+    function checkEvents() {
+        const sneezingBox = document.getElementById("sneezing-box");
+        const coughingBox = document.getElementById("coughing-box");
+
+        if (events.includes("sneezing")) {
+            sneezingBox.style.backgroundColor = "#0BDA51"; // Active color
+            sneezingBox.style.color = "#ffffff"; // Text color for active
+        } else {
+            sneezingBox.style.backgroundColor = "#f5f5f5"; // Default background
+            sneezingBox.style.color = "#c8c0c0"; // Default text color
+        }
+
+        if (events.includes("coughing")) {
+            coughingBox.style.backgroundColor = "#0BDA51"; // Active color
+            coughingBox.style.color = "#ffffff"; // Text color for active
+        } else {
+            coughingBox.style.backgroundColor = "#f5f5f5"; // Default background
+            coughingBox.style.color = "#c8c0c0"; // Default text color
+        }
+    }
+
+    // Simulate real-time events (this would be replaced by actual data from a server or sensor)
+    setInterval(() => {
+        // Randomly add or remove events
+        events = Math.random() > 0.5 ? ["sneezing"] : ["coughing"];
+        checkEvents();
+    }, 1000);
+
+</script>
+</body>
+</html>
