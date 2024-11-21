@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CES-2025</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Times New Roman", Times, serif;
+            background-color: #1b1b1b;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .patient-data-container {
+            background: #00ac95;
+            border-radius: 0px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .patient-data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .patient-data-table td {
+            padding: 2px 20px 2px 60px;
+            color: #fff;
+            font-size: 1.5em;
+        }
+
+        .content-container {
+            display: flex;
+            justify-content: center; /* Center align both containers */
+            align-items: flex-start; /* Align containers at the top */
+            gap: 10px; /* Add spacing between containers */
+            justify-content: space-between;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .left-container {
+            flex: 1.5; 
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .notification-container {
+            background-color: #000000;
+            color: #616060;
+            display: flex;
+            justify-content: space-between;
+            border-radius: 0px;
+            gap: 10px;
+            height: 150px; /* Matched height with vital-row */
+        }
+
+        .notification-box {
+            flex: 1;
+            background-color: #000000;
+            color: #464646;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            font-size: 2.5em;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-container {
+            background-color: #f38c8c;
+            border-radius: 0px;
+            height: 645px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .video-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .right-container {
+            flex: 1.5; /* Adjust width proportionally to the left container */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .vital-top-row {
+            display: flex;
+            gap: 1px;
+            padding-bottom: 11px;
+           
+        }
+        .temperature-container, .spo2-container {
+            flex: 1;
+            height: 110px;
+            border-radius: 0px;
+            text-align: center;
+            padding: 20px;
+            padding-bottom: 20px;
+            color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .temperature-container {
+            background: black;
+        }
+        .spo2-container {
+            background: black;
+        }
+        .temperature-container h3{
+            font-size: 1em;
+            margin-bottom: 5px;
+            color: orange;
+        }
+        .spo2-container h3 {
+            font-size: 1em;
+            margin-bottom: 5px;
+            color: darkviolet;
+        }
+        .temperature-container p {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 0;
+            color: orange;
+        }
+
+        .spo2-container p{
+            font-size: 3em;
+            font-weight: bold;
+            margin: 0;
+            color: darkviolet;
+        }
+        .canvas{
+            width: 100%;
+        }
+        .graph-row {
+            display: flex;
+            height: 201px;
+            width: 100%;
+            align-items: center;
+        }
+        .graph-container {
+            height: 225px;
+            gap: 5px;
+            width: 80%;
+            position: relative;
+            background-color: #000;
+            border-radius: 0px 0px 0px 0px;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        .graph-container canvas {
+            width: 100%;
+            height: 300px;
+        }
+        .vital-box {
+            width: 23%;
+            height: 215px;
+            background-color: #284753;
+            border-radius:0px 0px 0px 0px;
+            text-align: center;
+            padding: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+        }
+        .ecg-box {
+            background: black;
+            color: greenyellow;
+        }
+        .ppg-box {
+            background: black;
+            color: blue;
+        }
+        .heart-rate-box {
+            background: black;
+            color: red;
+        }
+        .vital-box h3 {
+            font-size: 1em;
+            margin: 0;
+        }
+        .vital-box p {
+            font-size: 3em;
+            font-weight: bold;
+        }
+    </style>
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Patient Data Container -->
+        <div class="patient-data-container">
+            <table class="patient-data-table">
+                <tr>
+                    <td><strong>Patient ID:</strong> 12345</td>
+                    <td><strong>Name:</strong> John Doe</td>
+                    <td><strong>Sex:</strong> Male</td>
+                    <td><strong>Age:</strong> 45</td>
+                    <td><strong>Height:</strong> 180 cm</td>
+                    <td><strong>Weight:</strong> 75 kg</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Content Section -->
+        <div class="content-container">
+            <!-- Left Container -->
+            <div class="left-container">
+                <!-- Notifications -->
+                <div class="notification-container">
+                    <div class="notification-box" id="sneezing-box">SNEEZE</div>
+                    <div class="notification-box" id="coughing-box">COUGH</div>
+                </div>
+                <!-- Video -->
+                <div class="video-container">
+                    <img id="video" src="http://192.168.6.118:5000/video_feed" alt="Live Feed" />
+                </div>
+            </div>
+
+            <!-- Right Container -->
+        <div class="right-container">
+            <div class="vital-top-row">
+                <div class="temperature-container">
+                    <h3>Temperature (°C)<span style="font-size:30px; padding:5px;">&#x1F321;</span></h3>
+                    <p id="temperature-value">--</p>
+                </div>
+                <div class="spo2-container">
+                    <h3>SpO2 (%)</h3>
+                    <p id="spo2-value">--</p>
+                </div>
+            </div>
+    
+            <div class="graph-row">
+                <div class="graph-container">
+                    <canvas id="ecgChart"></canvas>
+                </div>
+                <div class="vital-box ecg-box">
+                    <h3>ECG (uV)</h3>
+                    <p id="ecg-value">--</p>
+                </div>
+            </div>
+    
+            <div class="graph-row">
+                <div class="graph-container">
+                    <canvas id="ppgChart"></canvas>
+                </div>
+                <div class="vital-box ppg-box">
+                    <h3>PPG (AU)</h3>
+                    <p id="ppg-value">--</p>
+                </div>
+            </div>
+    
+            <div class="graph-row">
+                <div class="graph-container">
+                    <canvas id="heartRateChart"></canvas>
+                </div>
+                <div class="vital-box heart-rate-box">
+                    <h3>HR (bpm) <span style="color: red; font-size: 40px; padding: 5px; vertical-align: middle; position: relative; top: 1px;">&#x2764;</span></h3>
+                    <p id="heartRate-value">--</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <script>
+        // Initialize datasets
+    const ecgData = { labels: [''], datasets: [{ data: [0], borderColor: 'green', fill: false }] };
+    const ppgData = { labels: [''], datasets: [{ data: [0], borderColor: 'blue', fill: false }] };
+    const heartRateData = { labels: [''], datasets: [{ data: [0], borderColor: 'red', fill: false }] };
+
+    // Chart options
+    const chartOptions = {
+        responsive: true,
+        animation: false,
+        scales: {
+            x: { display: false },
+            y: { display: false }
+        },
+        elements: { point: { radius: 0 }, line: { tension: 0.1 } },
+        plugins: { legend: { display: false } }
+    };
+
+    // Create charts
+    const ecgChart = new Chart(document.getElementById('ecgChart').getContext('2d'), { type: 'line', data: ecgData, options: chartOptions });
+    const ppgChart = new Chart(document.getElementById('ppgChart').getContext('2d'), { type: 'line', data: ppgData, options: chartOptions });
+    const heartRateChart = new Chart(document.getElementById('heartRateChart').getContext('2d'), { type: 'line', data: heartRateData, options: chartOptions });
+
+   // Fetch and update data every second
+   setInterval(fetchVitalData, 1000);
+
+async function fetchVitalData() {
+    try {
+        const response = await fetch('http://192.168.6.118:5050/data');
+        const data = await response.json();
+        if (data.length > 0) {
+            const latestData = data[data.length - 1];
+
+            // Update placeholders
+            document.getElementById('temperature-value').textContent = `${latestData.temperature || '--'}`;
+            document.getElementById('spo2-value').textContent = `${latestData.SpO2_val || '--'}`;
+            document.getElementById('ecg-value').textContent = `${latestData.ecg || '--'}`;
+            document.getElementById('ppg-value').textContent = `${latestData.ppg_ir || '--'}`;
+            document.getElementById('heartRate-value').textContent = `${latestData.heart_rate || '--'}`;
+
+            // Update chart data
+            updateChartData(ecgChart, ecgData, latestData.ecg);
+            updateChartData(ppgChart, ppgData, latestData.ppg_ir);
+            updateChartData(heartRateChart, heartRateData, latestData.heart_rate);
+
+            ecgChart.update();
+            ppgChart.update();
+            heartRateChart.update();
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+    }
+    function updateChartData(chart, dataset, value) {
+         dataset.labels.push('');
+         dataset.datasets[0].data.push(parseFloat(value) || 0);
+         if (dataset.labels.length > 100) {
+            dataset.labels.shift();
+            dataset.datasets[0].data.shift();
+         }
+         // Replace existing data with the latest value
+        // dataset.labels = ['']; // Only one label for the latest data point
+        // dataset.datasets[0].data = [parseFloat(value) || 0]; // Only the latest data point
+
+        // chart.update(); // Update the chart
+    }
+
+    async function fetchCoughDetection() {
+        try {
+            const response = await fetch("http://192.168.6.118:5000/notifications");
+            const data = await response.json();
+
+            // Update the coughing-box notification
+            const coughingBox = document.getElementById("coughing-box");
+            if (data.coughing) {
+                coughingBox.style.color = "#90EE90"; // Green for active
+  //               delay(1000)
+            } else {
+                coughingBox.style.color = "#616060"; // White for inactive
+            }
+            
+            //update the sneezing-box
+            const sneezingBox = document.getElementById("sneezing-box");
+            if (data.sneeze) {
+                sneezingBox.style.color = "#90EE90"; // Green for active
+  //               delay(1000)
+            } else {
+                sneezingBox.style.color = "#616060"; // White for inactive
+            }
+        } catch (error) {
+            console.error("Error fetching notifications:", error);
+        }
+    }
+
+    
+    setInterval(fetchCoughDetection, 100);
+    </script>
+</body>
+</html>
