@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CES-2025</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Times New Roman", Times, serif;
+            background-color: #1c3e5e;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .patient-data-container {
+            background: #1c3e5e;
+            border-radius: 0%;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            flex-grow: 1; /* Allow the table to stretch */
+        }
+
+        .patient-data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .patient-data-table td {
+            padding: 5px 20px;
+            color: white;
+            font-size: 1.5em;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+        .patient-data-row {
+            display: flex;
+            align-items: center;
+            gap: 0px; /* Add space between the logo and the table */
+            width: 100%; /* Ensures the row stretches across the container */
+        }
+
+        .logo {
+            max-height: auto; /* Set the logo's height */
+            max-width: auto;
+        }
+        .content-container {
+            display: flex;
+            justify-content: center; /* Center align both containers */
+            align-items: flex-start; /* Align containers at the top */
+            gap: 10px; /* Add spacing between containers */
+            justify-content: space-between;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .left-container {
+            flex: 1.5; 
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+         .video-container {
+            background-color: #424242;
+            border-radius: 0px;
+            height: 800px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+
+        .right-container {
+            flex: 1.5; /* Adjust width proportionally to the left container */
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+        .vital-top-row {
+            display: flex;
+            gap: 1px;
+        }
+        .temperature-container {
+            flex: 1;
+            background-color: #000000;
+            height: 175px;
+            text-align: center;
+            justify-content: space-between;
+            padding: 5px;
+            padding-bottom: 0px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+        }
+        
+        .spo2-container h3{
+       
+        color: #40e0a6; /* Set heading color to purple */
+        font-size: 1em; /* Adjust heading font size if needed */
+        }
+
+        #spo2-min, #spo2-max {
+            font-size: 1.4em; /* Increase the font size */
+            font-weight: bold; /* Make the font bold */
+            color: #40e0a6; /* Optional: Change color for better visibility */
+        }
+
+        #HR-min, #HR-max {
+            font-size: 1.4em; /* Increase the font size */
+            font-weight: bold; /* Make the font bold */
+            color: red; /* Optional: Change color for better visibility */
+        }
+        /* Font size for vital values */
+        #temperature-value, #spo2-value {
+            font-size: 4em; /* Set font size to 5em */
+            font-weight: bold;
+        }
+
+        #spo2-value, #HR-value {
+            font-size: 4em; /* Set font size to 5em */
+            font-weight: bold;
+        }
+
+        .temperature-values {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #FF8C00;
+            font-weight: bold;
+        }
+
+        .temperature-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px; /* Space between values */
+            position: relative;
+            width: 100%; /* Ensures full width for alignment */
+        }
+
+        .temperature-row.left-align {
+            justify-content: flex-start; /* Aligns min value to the left */
+        }
+        #temperature-min, #temperature-max {
+            /* margin-left: 44%; Add space for left alignment */
+            font-size: 1.4em; /* Increase the font size */
+            font-weight: bold; /* Make the font bold */
+            color: #FF8C00; /* Optional: Change color for better visibility */
+        }
+     
+        .HR-values{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            color: red;
+            font-size: 3em;
+            font-weight: bold;
+        }
+
+        .HR-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 100%; /* Ensures full width for alignment */
+        }
+
+        .HR .left-align {
+            justify-content: flex-start; /* Aligns min value to the left */
+        }
+      
+        .temperature-container h3{
+            font-size: 1em;
+            margin-top: 1px;
+            margin-bottom: 5px;
+            color: #FF8C00;
+        }
+   
+        .spo2-values {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+            gap: 5px;
+            font-size: 3em;
+            font-weight: bold;
+        }
+
+        .spo2-row {
+            display: flex;
+            color: #40e0a6;
+            justify-content: center;
+            align-items: center;
+            gap: 10px; /* Space between values */
+            position: relative;
+            width: 100%; /* Ensures full width for alignment */
+        }
+
+        .spo2-row.left-align {
+            justify-content: flex-start; /* Aligns min value to the left */
+        }
+
+        #spo2-min {
+            margin-left: 40%; /* Add space for left alignment */
+        }
+
+        .element{
+            display: block;
+            box-sizing: border-box;
+            height: 140px;
+        }
+        .graph-row {
+            display: flex;
+            height: 180px;
+            width: 100%;
+            align-items: center;
+        }
+        .graph-container {
+            height: 101%; /* Allow the graph to take full height */
+            width: 100%; /* Allow the graph to take full width */
+            position: relative; /* Required for Chart.js */
+            /* height: 181px; */
+            gap: 5px;
+            /* width: 80%; */
+            position: relative;
+            background-color: #000;
+            border-radius: 0px 0px 0px 0px;
+            padding: 5px;
+            box-sizing: border-box;
+        }
+        
+        .vital-box {
+            width: 23%;
+            background-color: #000000;
+            border-radius:0px 0px 0px 0px;
+            text-align: center;
+            padding: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            color: #ffffff;
+        }
+        .ecg-box {
+            background: black;
+            color: #8DFF0A;
+        }
+        .ppg-box {
+            background: black;
+            color: blue;
+        }
+        .heart-rate-container {
+            background: black;
+            color: red;
+        }
+        .heart-rate-container h3 img {
+            width: 30px;  /* Resize the image to fit with the text */
+            height: auto;  /* Keep the aspect ratio intact */
+            margin-left: 10px;  /* Optional: Add space between text and image */
+            vertical-align: middle;  /* Align image vertically with the text */
+        }
+
+        .spo2-container h3 img {
+            width: 30px;  /* Resize the image to fit with the text */
+            height: auto;  /* Keep the aspect ratio intact */
+            margin-left: 10px;  /* Optional: Add space between text and image */
+            vertical-align: middle;  /* Align image vertically with the text */
+            color: #40e0a6;
+        }
+        .vital-box h3 {
+            font-size: 1em;
+            margin: 0;
+        }
+        .vital-box p {
+            font-size: 3em;
+            font-weight: bold;
+        }
+
+        .alert-container {
+            background-color: #000000;
+            display: flex; /* Use flexbox to align items in a row */
+            justify-content: space-between; /* Add space between the tables */
+            align-items: flex-start; /* Align tables to the top */
+            gap: 5px; /* Add spacing between tables */
+            margin-top: 1px; /* Optional: Add some margin above the container */
+            height: 255px;
+        }
+
+        .alert-table {
+            flex: 1; /* Make all tables equal width */
+            background-color: #000;
+            color: white;
+            border: 1px solid #000000;
+            box-shadow: 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .alert-table h3 {
+            text-align: center;
+            color: rgb(136, 136, 136);
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        .alert-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .alert-table td {
+            padding: 10px;
+            background-color: #1c3e5e;
+            font-size: 1em;
+            color: red;
+            text-align: center;
+        }
+
+        /* Sneeze/Cough Alerts - Yellow Background */
+        .yellow-alert td {
+            background-color: black;
+            color: yellow;
+           
+        }
+
+        /* Eating/Drinking Alerts - Orange Background */
+        .orange-alert td {
+            background-color:black;
+            color: orange;
+            
+        }
+
+        /* Vital Alerts - Dynamic Colors */
+        .red-alert td {
+            background-color: black;
+            color:red;
+          
+        }
+
+        .green-alert td {
+            background-color:black;
+            color: greenyellow;
+            
+        }
+
+        .yellow-alert td {
+            background-color: rgb(0, 0, 0);
+            color: yellow;
+            
+        }
+
+        .default-alert td {
+            background-color: black;
+            color: grey;
+           
+        }
+
+        #sneeze-cough-alert-table {
+            flex: 1.3; /* Decrease width */
+            max-width: 50%; /* Set maximum width for smaller table */
+        }
+
+        #eating-drinking-alert-table {
+            flex: 1.4; /* Decrease width */
+            max-width: 50%; /* Set maximum width for smaller table */
+        }
+
+        #vital-alert-table {
+            flex: 2; /* Increase width */
+            max-width: 50%; /* Set maximum width for larger table */
+        }
+
+        .spo2-container td,
+        .heart-rate-container td {
+            padding: 10px; /* Adjust padding as needed */
+            vertical-align: middle; /* Center-align content vertically */
+            font-size: 1.2em; /* Adjust font size for better visibility */
+        }
+
+        .temperature-container td {
+            padding-top: 10px;
+            padding-bottom: 14.5px;
+            vertical-align: middle; /* Center-align content vertically */
+            text-align: center; /* Ensure alignment is centered */
+        }
+
+
+        /* To handle responsive scaling */
+        
+        .spo2-container,
+        .heart-rate-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center align content */
+            align-items: stretch; /* Ensure content occupies full width */
+            box-sizing: border-box;
+            height: 101%; /* Ensure containers maintain their height */
+        }
+    </style>
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+</head>
+<body>
+<div class="main-container">
+    <div class="patient-data-row">
+    <img src="1.png" alt="Glide logo" class="logo">
+        <!-- Patient Data Container -->
+        <div class="patient-data-container">
+            
+            <table class="patient-data-table">
+                <tr>
+                    <td><strong>Patient ID:</strong> 12345</td>
+                    <td><strong>Name:</strong> John Doe</td>
+                    <td><strong>Sex:</strong> Male</td>
+                    <td><strong>Age:</strong> 25</td>
+                    <td><strong>Height:</strong> 170 cm</td>
+                    <td><strong>Weight:</strong> 51.2 kg</td>
+                    <td><strong>BMI</strong> 17.7 kg/m2</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+        <!-- Content Section -->
+    <div class="content-container">
+            <!-- Left Container -->
+            <div class="left-container">
+               
+                <!-- Video -->
+                <div class="video-container">
+                    <video id="videoPlayer" src="final.mp4" controls autoplay loop></video>
+                </div>
+                 
+            </div>
+
+            <!-- Right Container -->
+             
+        <div class="right-container">
+            <div class="vital-top-row">
+                <div class="temperature-container">
+                    <h3>Temperature (°C)<span style="font-size:30px; padding:5px;">&#x1F321;</span></h3>
+                    <div class="temperature-values">
+                        <div class="temperature-row">
+                            <table>
+                                <tr>
+                                    <td id="temperature-max">--</td> <!-- Display max temperature -->
+                                </tr>
+                               
+                                <tr><td id="temperature-min">--</td></tr> <!-- Display min temperature -->
+                            </table>
+                            <table>
+                                <tr>
+                                    <td ></td> 
+                                    <td id="temperature-value">--</td> <!-- Display the current temperature -->
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="history-container">
+                    <h3>Complaints</h3>
+                    <div class="history-table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Palpitations/ racing heart</td>
+                                </tr>
+                                <tr>
+                                    <td>Persistent Fever</td>
+                                </tr>
+                                <tr>
+                                    <td>Fatigue due to persistent coughing or sneezing</td>
+                                </tr>
+                                <tr>
+                                    <td>Difficulty swallowing or frequent choking</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> -->
+                
+            </div>
+
+            <div class="graph-row">
+                <div class="graph-container">
+                    <canvas id="ecgChart"></canvas>
+                </div>
+                <div class="vital-box heart-rate-container">
+                    <h3>HR (bpm) <img src="HR.png" alt="Glide logo" class="logo"></h3>
+                    <div class="HR-row">
+                           <table>
+                            <tr>
+                                <td id="HR-max">--</td>
+                                
+                            </tr>
+                     
+                            <tr><td id="HR-min">--</td></tr>
+                        </table>
+                        <table>
+                            <tr><td></td></tr>
+                            <tr>
+                                <td id="HR-value">--</td>
+                            </tr>
+                            <tr><td ></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>   
+    
+            <div class="graph-row">
+                <div class="graph-container">
+                    <canvas id="ppgChart"></canvas>
+                </div>
+                <div class="vital-box spo2-container">
+                    <h3>SpO2 (%)<img src="O2.png" alt="Glide logo" class="logo"></h3>
+                    <div class="spo2-row">
+                        <table>
+                            <tr>
+                                <td id="spo2-max">--</td>
+                            </tr>
+                            <tr><td id="spo2-min">--</td></tr>
+                        </table>
+                        <table>
+                            <tr><td></td></tr>
+                            <tr>
+                                <td id="spo2-value">--</td>
+                            </tr>
+                            <tr><td></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>        
+            <div class="alert-container">
+                <div class="alert-table" id="sneeze-cough-alert-table">
+                    <h3 style="color: white; text-align: center;">Sneeze/Cough Alerts</h3>
+                    <table>
+                        <tbody id="sneeze-cough-table-body">
+                            <!-- Alerts for sneeze and cough will appear here -->
+                        </tbody>
+                    </table>
+                </div>
+            
+                <div class="alert-table" id="eating-drinking-alert-table">
+                    <h3 style="color: white; text-align: center;">Eating/Drinking Alerts</h3>
+                    <table>
+                        <tbody id="eating-drinking-table-body">
+                            <!-- Alerts for eating and drinking will appear here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert-table" id="vital-alert-table">
+                    <h3 style="color: white; text-align: center;">Vital Alerts</h3> 
+                    <table>
+                        <tbody id="alert-table-body">
+                            <!-- Alerts will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div> 
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script>
+
+const video = document.getElementById('videoPlayer');
+
+    // Set video properties for autoplay and no controls
+    video.autoplay = true; // Enable autoplay
+    video.controls = false; // Hide controls
+    video.loop = true; // Optional: loop the video
+    video.muted = true; // Optional: mute the video for autoplay compatibility
+    video.play();
+    // video.play().catch((error) => {
+    //     console.error("Autoplay with sound is restricted:", error);
+    //     video.muted = true; // Fallback to muted autoplay
+    //     video.play();
+    // });
+
+function manageAlertTable(tableBodyId, message, colorClass, maxRows = 6) {
+    const tableBody = document.getElementById(tableBodyId);
+
+    // Check if the table has reached the maximum number of rows
+    while (tableBody.children.length >= 5) {
+        // Remove the oldest row
+        tableBody.removeChild(tableBody.firstChild);
+    }
+
+    // Create a new row for the alert
+    const row = document.createElement("tr");
+    const messageCell = document.createElement("td");
+    messageCell.textContent = message;
+    row.appendChild(messageCell);
+
+    // Apply color class to the row
+    row.classList.add(colorClass);
+
+    // Append the new alert to the table body
+    tableBody.appendChild(row);
+}
+
+// Function to add Sneeze/Cough Alerts with yellow background
+function addSneezeCoughAlert(message, timestamp) {
+    manageAlertTable(
+        "sneeze-cough-table-body",
+        `${timestamp}: ${message}`,
+        "yellow-alert"
+    );
+}
+
+// Function to add Eating/Drinking Alerts with orange background
+function addEatingDrinkingAlert(message, timestamp) {
+    manageAlertTable(
+        "eating-drinking-table-body",
+        `${timestamp}: ${message}`,
+        "orange-alert"
+    );
+}
+
+
+
+// Function to add Vital Alerts with red/green/yellow background based on type
+function addVitalAlert(message, type) {
+    let colorClass;
+    switch (type) {
+        case "high":
+            colorClass = "red-alert"; // Critical alert
+            break;
+        case "medium":
+            colorClass = "yellow-alert"; // Warning alert
+            break;
+        case "low":
+            colorClass = "green-alert"; // Normal alert
+            break;
+        default:
+            colorClass = "default-alert"; // Default color
+    }
+
+    const timestamp = new Date().toLocaleTimeString();
+    manageAlertTable("alert-table-body", `${timestamp}: ${message}`, colorClass, 4);
+     // Check for heart rate spike
+}
+
+function checkVitalsAndAddAlerts(latestData) {
+    // Check for heart rate spike
+    if (latestData.heart_rate > 80) {
+        addVitalAlert(`HR(${latestData.heart_rate} bpm)Attention Required!`, "high");
+    }
+
+    // Check for SpO₂ stability
+    if (latestData.SpO2_val >= 95) {
+        addVitalAlert(`SpO₂ stable (${latestData.SpO2_val}%) RED`, "low");
+    }
+}
+
+ const notificationActions = [
+        { time: 10, action: "coughing" },
+        { time: 11, action: "coughing" },
+        { time: 12, action: "coughing" },
+        { time: 13, action: "coughing" },
+        { time: 23, action: "drinking" },
+        { time: 60, action: "drinking" },
+        { time: 94, action: "eating" },
+        { time: 106, action: "drinking" },
+        { time: 126, action: "drinking" },
+        { time: 138, action: "sneezing" }
+    ];
+
+    const videoPlayer = document.getElementById('videoPlayer');
+    const sneezingBox = document.getElementById('sneezing-box');
+    const coughingBox = document.getElementById('coughing-box');
+
+    // Track notifications already triggered (reset after each play)
+    let triggeredNotifications = new Set();
+
+    // Listen to video timeupdate event
+    videoPlayer.addEventListener('timeupdate', () => {
+        const currentTime = Math.floor(videoPlayer.currentTime);
+
+        // Loop through notification actions
+        notificationActions.forEach(({ time, action }) => {
+            // Only trigger the notification if this timestamp has not been triggered already
+            if (currentTime === time && !triggeredNotifications.has(time)) {
+                triggeredNotifications.add(time); // Mark timestamp as notified
+                const timestamp = new Date().toLocaleTimeString();
+                if (action === "sneezing") addSneezeCoughAlert("Sneeze detected", timestamp);
+                if (action === "coughing") addSneezeCoughAlert("Cough detected", timestamp);
+                if (action === "eating") addEatingDrinkingAlert("Eating detected", timestamp);
+                if (action === "drinking") addEatingDrinkingAlert("Drinking detected", timestamp);
+            }
+             if (currentTime === 0){
+             triggeredNotifications.clear();
+            }
+        });
+    });
+
+    // Handle video play and resume events (reset triggered notifications)
+    videoPlayer.addEventListener('play', () => {
+        // Reset triggered notifications when video starts or resumes
+        triggeredNotifications.clear();
+        console.log(`Video started/resumed at ${Math.floor(videoPlayer.currentTime)} seconds.`);
+    });
+
+    // Handle pause event (optional, for debugging)
+    videoPlayer.addEventListener('pause', () => {
+        console.log(`Video paused at ${Math.floor(videoPlayer.currentTime)} seconds.`);
+    });
+// Example of dynamically generating alerts
+let vitalAlertTriggered = false; // Declare and initialize
+setInterval(() => {
+    const timestamp = new Date().toLocaleTimeString();
+    // Example of vital alerts
+    if (vitalAlertTriggered) {
+        const types = ["high", "medium", "low"];
+    }
+}, 5000);
+
+
+// Initialize charts
+const ecgData = {
+    labels: [],
+    datasets: [{
+        label: 'ECG',
+        data: [],
+        borderColor: '#8DFF0A',
+        fill: false,
+    }]
+};
+
+const ppgData = {
+    labels: [],
+    datasets: [{
+        label: 'PPG_IR',
+        data: [],
+        borderColor: '#FD0EAE',
+        fill: false,
+    },
+    {
+        label: 'PPG RED',
+        data: [],
+        borderColor: '#0FE6FF',
+        fill: false,
+        tension: 0.1,
+    }
+    ]
+};
+
+// Chart options
+const chartOptions = {
+    responsive: true,
+    animation: false,
+    maintainAspectRatio: false, // Allow the chart to fill the container
+    scales: {
+        x: { display: false },
+        y: { display: false }
+    },
+    elements: {
+        point: { radius: 0 },
+        line: { tension: 0.1 }
+    },
+    plugins: {
+        legend: { 
+            display: true,
+            position: 'top',
+            align: 'start',
+            labels: {
+                boxWidth: 30, // Adjusts the size of the legend boxes
+                boxHeight: 1,
+                padding: 10, // Adds padding between legend items
+                usePointStyle: false // Displays legend items as inline symbols
+            }
+        }
+    }
+};
+
+// Create charts
+const ecgChart = new Chart(document.getElementById('ecgChart').getContext('2d'), {
+    type: 'line',
+    data: ecgData,
+    options: chartOptions
+});
+
+// const ppgChart = new Chart(document.getElementById('ppgChart').getContext('2d'), {
+//     type: 'line',
+//     data: ppgData,
+//     options: chartOptions
+// });
+
+const ppgChart = new Chart(document.getElementById('ppgChart').getContext('2d'), {
+    type: 'line',
+    data: ppgData,
+    options: {
+        maintainAspectRatio: false, // Allow the chart to fill the container
+        responsive: true,
+
+        animation: false,
+        scales: {
+            x: { display: false },
+            y: { display: false },
+        },
+        elements: {
+            point: { radius: 0 },
+            line: { tension: 0.1 },
+        },
+        plugins: {
+            legend: { 
+                display: true,
+                position: 'top',
+                align: 'start',
+            labels: {
+                boxWidth: 30, // Adjusts the size of the legend boxes
+                boxHeight: 1,
+                padding: 10, // Adds padding between legend items
+                usePointStyle: false // Displays legend items as inline symbols
+            }
+                
+            }
+        },
+    },
+});
+
+// Function to update PPG Chart with IR and RED data
+function updatePPGChart(irValue, redValue) {
+    ppgData.labels.push(''); // Add an empty label for the new data point
+    ppgData.datasets[0].data.push(parseFloat(irValue) || 0); // Add PPG_IR data
+    ppgData.datasets[1].data.push(parseFloat(redValue) || 0); // Add PPG_RED data
+
+    // Limit the number of data points to 100
+    if (ppgData.labels.length > 100) {
+        ppgData.labels.shift();
+        ppgData.datasets[0].data.shift();
+        ppgData.datasets[1].data.shift();
+    }
+
+    // Update the chart
+    ppgChart.update();
+}
+
+// Function to update charts
+function updateChartData(chart, dataset, value) {
+    dataset.labels.push('');
+    dataset.datasets[0].data.push(parseFloat(value) || 0);
+    if (dataset.labels.length > 100) {
+        dataset.labels.shift();
+        dataset.datasets[0].data.shift();
+    }
+    chart.update();
+}
+
+
+// Function to fetch and display vital data
+async function fetchVitalData() {
+    try {
+        const response = await fetch('http://192.168.6.118:8000/data');
+        const data = await response.json();
+        if (data.length > 0) {
+            const latestData = data[data.length - 1];
+
+            // Update temperature values
+            document.getElementById('temperature-value').textContent = latestData.temperature || '--';
+            document.getElementById('spo2-value').textContent = latestData.SpO2_val || '--';
+            document.getElementById('HR-value').textContent = latestData.heart_rate || '--';
+
+            // Update charts
+            updateChartData(ecgChart, ecgData, latestData.ecg);
+            updateChartData(ppgChart, ppgData, latestData.ppg_ir);
+            updatePPGChart(latestData.ppg_ir, latestData.ppg_red);
+
+               // Check for alerts based on vital values
+               checkVitalsAndAddAlerts(latestData);
+        }
+    } catch (error) {
+        console.error("Error fetching vital data:", error);
+    }
+}
+
+async function loadConfig() {
+    try {
+        // Fetch the thresholds data from Flask
+        const response = await fetch('http://192.168.6.118:8000/config');
+        const config = await response.json();
+
+        // Update min and max thresholds in the UI
+        document.getElementById('temperature-min').textContent = config.thresholds.temperature.min;
+        document.getElementById('temperature-max').textContent = config.thresholds.temperature.max;
+        document.getElementById('spo2-min').textContent = config.thresholds.spo2.min;
+        document.getElementById('spo2-max').textContent = config.thresholds.spo2.max;
+        document.getElementById('HR-min').textContent = config.thresholds.HR.min;
+        document.getElementById('HR-max').textContent = config.thresholds.HR.max;
+    } catch (error) {
+        console.error("Error loading thresholds:", error);
+    }
+}
+
+// Load configuration and fetch vitals on page load
+window.onload = () => {
+    loadConfig();
+    fetchVitalData();
+};
+    </script>
+</body>
+</html>

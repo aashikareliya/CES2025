@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CES-2025</title>
+    <link rel="stylesheet" href="style.css">
+    
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="main-container">
+    <div class="patient-data-row">
+    <img src="glide.jpg" alt="Glide logo" class="logo">
+        <!-- Patient Data Container -->
+        <div class="patient-data-container">
+            
+            <table class="patient-data-table">
+                <tr>
+                    <td><strong>Patient ID:</strong> 12345</td>
+                    <td><strong>Name:</strong> John Doe</td>
+                    <td><strong>Sex:</strong> Male</td>
+                    <td><strong>Age:</strong> 45</td>
+                    <td><strong>Height:</strong> 180 cm</td>
+                    <td><strong>Weight:</strong> 75 kg</td>
+                    <td><strong>BMI</strong> 25 kg/m</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+        <!-- Content Section -->
+    <div class="content-container">
+            <!-- Left Container -->
+            <div class="left-container">
+               
+                <!-- Video -->
+                <div class="video-container">
+                    <video id="videoPlayer" src="all-key_bb_demo.mp4" controls autoplay loop></video>
+                    <!-- <img id="video" src="http://192.168.6.118:5000/video_feed" alt="Live Feed" /> -->
+                </div>
+                 
+            </div>
+
+            <!-- Right Container -->
+             
+        <div class="right-container">
+            <div class="vital-top-row">
+                <div class="temperature-container">
+                    <h3>Temperature (°C)<span style="font-size:30px; padding:5px;">&#x1F321;</span></h3>
+                    <div class="temperature-values">
+                        <div class="temperature-row">
+                            <span id="temperature-max">--</span>
+                            <span class="divider"></span>
+                            <span id="temperature-value">--</span>
+                        </div>
+                        <div class="temperature-row left-align">
+                            <span id="temperature-min">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="history-container">
+                    <h3>Hisrtory</h3>
+                    <div class="history-table">
+                        <tr>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="graph-row">
+                <div class="graph-container">
+                    <canvas id="ecgChart"></canvas>
+                </div>
+                <div class="vital-box heart-rate-box">
+                    <h3>HR (bpm) <span style="color: red; font-size: 40px; padding: 5px; vertical-align: middle; position: relative; top: 1px;">&#x2764;</span></h3>
+                    <div class="HR-row">
+                        <span id="HR-max">--</span>
+                        <span class="divider"></span>
+                        <span id="HR-value">--</span>
+                    </div>
+                    <div class="HR-row left-align">
+                        <span id="HR-min">--</span>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="graph-row">
+                <div class="graph-container">
+                    <canvas id="ppgChart"></canvas>
+                </div>
+                <div class="vital-box spo2-container">
+                    <h3>SpO2 (%)</h3>
+                    <div class="spo2-row">
+                        <span id="spo2-max">--</span>
+                        <span class="divider"></span>
+                        <span id="spo2-value">--</span>
+                    </div>
+                    <div class="spo2-row left-align">
+                        <span id="spo2-min">--</span>
+                    </div>
+                    
+                </div>
+            </div>        
+            <div class="alert-section"></div>
+            <div class="alert-container">
+                <div class="alert-table" id="sneeze-cough-alert-table">
+                    <h3 style="color: white; text-align: center;">Sneeze/Cough Alerts</h3>
+                    <table>
+                        <tbody id="sneeze-cough-table-body">
+                            <!-- Alerts for sneeze and cough will appear here -->
+                        </tbody>
+                    </table>
+                </div>
+            
+                <div class="alert-table" id="eating-drinking-alert-table">
+                    <h3 style="color: white; text-align: center;">Eating/Drinking Alerts</h3>
+                    <table>
+                        <tbody id="eating-drinking-table-body">
+                            <!-- Alerts for eating and drinking will appear here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert-table" id="vital-alert-table">
+                    <h3 style="color: white; text-align: center;">Vital Alerts</h3> 
+                    <table>
+                        <tbody id="alert-table-body">
+                            <!-- Alerts will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script>
+        function manageAlertTable(tableBodyId, message, colorClass, maxRows = 3) {
+            const tableBody = document.getElementById(tableBodyId);
+
+            // Check if the table has reached the maximum number of rows
+            if (tableBody.children.length >= maxRows) {
+                // Remove the oldest row
+                tableBody.removeChild(tableBody.firstChild);
+            }
+
+            // Create a new row for the alert
+            const row = document.createElement("tr");
+            const messageCell = document.createElement("td");
+            messageCell.textContent = message;
+            row.appendChild(messageCell);
+
+            // Apply color class to the row
+            row.classList.add(colorClass);
+
+            // Append the new alert to the table body
+            tableBody.appendChild(row);
+        }
+
+        // Function to add Sneeze/Cough Alerts with yellow background
+        function addSneezeCoughAlert(message, timestamp) {
+            manageAlertTable(
+                "sneeze-cough-table-body",
+                `${timestamp}: ${message}`,
+                "yellow-alert"
+            );
+        }
+
+        // Function to add Eating/Drinking Alerts with orange background
+        function addEatingDrinkingAlert(message, timestamp) {
+            manageAlertTable(
+                "eating-drinking-table-body",
+                `${timestamp}: ${message}`,
+                "orange-alert"
+            );
+        }
+
+        // Function to add Vital Alerts with red/green/yellow background based on type
+        function addVitalAlert(message, type) {
+            let colorClass;
+            switch (type) {
+                case "high":
+                    colorClass = "red-alert"; // Critical alert
+                    break;
+                case "medium":
+                    colorClass = "yellow-alert"; // Warning alert
+                    break;
+                case "low":
+                    colorClass = "green-alert"; // Normal alert
+                    break;
+                default:
+                    colorClass = "default-alert"; // Default color
+            }
+
+            const timestamp = new Date().toLocaleTimeString();
+            manageAlertTable("alert-table-body", `${timestamp}: ${message}`, colorClass);
+        }
+
+const notificationActions = [
+        { time: 9, action: "coughing" },
+        { time: 10, action: "coughing" },
+        { time: 11, action: "coughing" },
+        { time: 12, action: "coughing" },
+        { time: 23, action: "drinking" },
+        { time: 60, action: "drinking" },
+        { time: 94, action: "eating" },
+        { time: 106, action: "drinking" },
+        { time: 126, action: "drinking" },
+        { time: 138, action: "sneezing" }
+    ];
+
+    const videoPlayer = document.getElementById('videoPlayer');
+    const sneezingBox = document.getElementById('sneezing-box');
+    const coughingBox = document.getElementById('coughing-box');
+
+    // Track notifications already triggered (reset after each play)
+    let triggeredNotifications = new Set();
+
+    // Listen to video timeupdate event
+    videoPlayer.addEventListener('timeupdate', () => {
+        const currentTime = Math.floor(videoPlayer.currentTime);
+
+        // Loop through notification actions
+        notificationActions.forEach(({ time, action }) => {
+            // Only trigger the notification if this timestamp has not been triggered already
+            if (currentTime === time && !triggeredNotifications.has(time)) {
+                triggeredNotifications.add(time); // Mark timestamp as notified
+                const timestamp = new Date().toLocaleTimeString();
+                if (action === "sneezing") addSneezeCoughAlert("Sneeze detected", timestamp);
+                if (action === "coughing") addSneezeCoughAlert("Cough detected", timestamp);
+                if (action === "eating") addEatingDrinkingAlert("Eating detected", timestamp);
+                if (action === "drinking") addEatingDrinkingAlert("Drinking detected", timestamp);
+            }
+             if (currentTime === 0){
+             triggeredNotifications.clear();
+            }
+        });
+    });
+
+    // Handle video play and resume events (reset triggered notifications)
+    videoPlayer.addEventListener('play', () => {
+        // Reset triggered notifications when video starts or resumes
+        triggeredNotifications.clear();
+        console.log(`Video started/resumed at ${Math.floor(videoPlayer.currentTime)} seconds.`);
+    });
+
+    // Handle pause event (optional, for debugging)
+    videoPlayer.addEventListener('pause', () => {
+        console.log(`Video paused at ${Math.floor(videoPlayer.currentTime)} seconds.`);
+    });
+// Example of dynamically generating alerts
+setInterval(() => {
+    const timestamp = new Date().toLocaleTimeString();
+    // Example of vital alerts
+    const vitalAlertTriggered = Math.random() > 0.3;
+    if (vitalAlertTriggered) {
+        const types = ["high", "medium", "low"];
+        const randomType = types[Math.floor(Math.random() * types.length)];
+        addVitalAlert("Low oxygen saturation level", randomType);
+        addVitalAlert("High temperature detected!", randomType);
+        addVitalAlert("ECG irregularity detected!", randomType);
+        addVitalAlert("HRspike (120 bpm)-Immediate Attention Required!", randomType);
+    }
+}, 5000);
+
+
+         // Function to fetch and display temperature values
+    async function fetchTemperatureData() {
+        try {
+            // Fetch the YAML config
+            const response = await fetch("config.yaml");
+            const yamlText = await response.text();
+            const config = jsyaml.load(yamlText);
+
+            // Fetch live data
+            const liveResponse = await fetch('http://localhost:5050/data');
+            const liveData = await liveResponse.json();
+            const latestData = liveData[liveData.length - 1];
+
+            // Get min, max, and current values
+            const tempMin = config.thresholds.temperature.min;
+            const tempMax = config.thresholds.temperature.max;
+            const tempCurrent = latestData.temperature || "--";
+
+            // Update HTML elements
+            document.getElementById("temperature-min").textContent = tempMin;
+            document.getElementById("temperature-max").textContent = tempMax;
+            document.getElementById("temperature-value").textContent = tempCurrent;
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    }
+
+    // Call function and refresh data every second
+    setInterval(fetchTemperatureData, 1000);
+
+    // Function to fetch and display spo2 values
+    async function fetchspo2Data() {
+        try {
+            // Fetch the YAML config
+            const response = await fetch("config.yaml");
+            const yamlText = await response.text();
+            const config = jsyaml.load(yamlText);
+
+            // Fetch live data
+            const liveResponse = await fetch('http://192.168.1.4:5050/data');
+            const liveData = await liveResponse.json();
+            const latestData = liveData[liveData.length - 1];
+
+            // Get min, max, and current values
+            const spo2Min = config.thresholds.spo2.min;
+            const spo2Max = config.thresholds.spo2.max;
+            const spo2Current = latestData.SpO2_val|| "--";
+
+            // Update HTML elements
+            document.getElementById("spo2-min").textContent = spo2Min;
+            document.getElementById("spo2-max").textContent = spo2Max;
+            document.getElementById("spo2-value").textContent = spo2Current;
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    }
+
+    // Call function and refresh data every second
+    setInterval(fetchspo2Data, 1000);
+
+    // Function to fetch and display heartrate values
+    async function fetchHReData() {
+        try {
+            // Fetch the YAML config
+            const response = await fetch("config.yaml");
+            const yamlText = await response.text();
+            const config = jsyaml.load(yamlText);
+
+            // Fetch live data
+            const liveResponse = await fetch('http://192.168.1.4:5050/data');
+            const liveData = await liveResponse.json();
+            const latestData = liveData[liveData.length - 1];
+
+            // Get min, max, and current values
+            const HRMin = config.thresholds.HR.min;
+            const HRMax = config.thresholds.HR.max;
+            const HRCurrent = latestData.heart_rate|| "--";
+
+            // Update HTML elements
+            document.getElementById("HR-min").textContent = HRMin;
+            document.getElementById("HR-max").textContent = HRMax;
+            document.getElementById("HR-value").textContent = HRCurrent;
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    }
+
+    // Call function and refresh data every second
+    setInterval(fetchHRData, 1000);
+
+        // Initialize datasets
+    const ecgData = { labels: [''], datasets: [{ data: [0], borderColor: 'green', fill: false }] };
+    const ppgData = { labels: [''], datasets: [{ data: [0], borderColor: 'blue', fill: false }] };
+    const heartRateData = { labels: [''], datasets: [{ data: [0], borderColor: 'red', fill: false }] };
+
+    // Chart options
+    const chartOptions = {
+        responsive: true,
+        animation: false,
+        scales: {
+            x: { display: false },
+            y: {
+                display: true,
+                ticks: {
+                    beginAtZero: true, // Ensure the Y-axis starts at 0
+                    stepSize: 5,       // Adjust the step size for better visualization
+                },
+                suggestedMin: 0,       // Optional: Set a minimum value
+                suggestedMax: 100      // Optional: Set a maximum value dynamically
+            }
+        },
+        elements: { point: { radius: 0 }, line: { tension: 0.1 } },
+        plugins: { legend: { display: false } }
+    };
+
+
+    // Create charts
+    const ecgChart = new Chart(document.getElementById('ecgChart').getContext('2d'), { type: 'line', data: ecgData, options: chartOptions });
+    const ppgChart = new Chart(document.getElementById('ppgChart').getContext('2d'), { type: 'line', data: ppgData, options: chartOptions });
+    const heartRateChart = new Chart(document.getElementById('heartRateChart').getContext('2d'), { type: 'line', data: heartRateData, options: chartOptions });
+
+   // Fetch and update data every second
+   setInterval(fetchVitalData, 1000);
+
+async function fetchVitalData() {
+    try {
+        const response = await fetch('http://192.168.6.118:5050/data');
+        const data = await response.json();
+        if (data.length > 0) {
+            const latestData = data[data.length - 1];
+
+            // Update placeholders
+            document.getElementById('temperature-value').textContent = `${latestData.temperature || '--'}`;
+            document.getElementById('spo2-value').textContent = `${latestData.SpO2_val || '--'}`;
+            document.getElementById('ecg-value').textContent = `${latestData.ecg || '--'}`;
+            document.getElementById('ppg-value').textContent = `${latestData.ppg_ir || '--'}`;
+            document.getElementById('heartRate-value').textContent = `${latestData.heart_rate || '--'}`;
+
+            // Update chart data
+            updateChartData(ecgChart, ecgData, latestData.ecg);
+            updateChartData(ppgChart, ppgData, latestData.ppg_ir);
+            updateChartData(heartRateChart, heartRateData, latestData.heart_rate);
+
+            ecgChart.update();
+            ppgChart.update();
+            heartRateChart.update();
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+    }
+    function updateChartData(chart, dataset, value) {
+         dataset.labels.push('');
+         dataset.datasets[0].data.push(parseFloat(value) || 0);
+         if (dataset.labels.length > 100) {
+            dataset.labels.shift();
+            dataset.datasets[0].data.shift();
+         }
+         // Replace existing data with the latest value
+        // dataset.labels = ['']; // Only one label for the latest data point
+        // dataset.datasets[0].data = [parseFloat(value) || 0]; // Only the latest data point
+
+        // chart.update(); // Update the chart
+    }
+    </script>
+</body>
+</html>
