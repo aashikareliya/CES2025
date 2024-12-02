@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             font-family: "Times New Roman", Times, serif;
-            background-color: #1c3e5e;
+            background-color: #0c2a47;
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -27,10 +27,9 @@
         }
 
         .patient-data-container {
-            background: #1c3e5e;
+            background: #0c2a47;
             border-radius: 0%;
             padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             flex-grow: 1; /* Allow the table to stretch */
         }
 
@@ -105,7 +104,7 @@
             flex: 1; /* Equal width for all containers */
             height: 170px; /* Ensure consistent height */
             text-align: center; /* Center content horizontally */
-            background-color: #cccccc; /* Adjust as needed */
+            background-color: #1c3e5e; /* Adjust as needed */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             padding: 10px; /* Adjust padding to align elements */
             display: flex; /* Use flexbox for content alignment */
@@ -118,7 +117,7 @@
         #spo2-min, #spo2-max {
             font-size: 1.4em; /* Increase the font size */
             font-weight: bold; /* Make the font bold */
-            color: black; /* Optional: Change color for better visibility */
+            color: cyan; /* Optional: Change color for better visibility */
         }
 
         #HR-min, #HR-max {
@@ -152,7 +151,7 @@
 
         .spo2-row{
             display: flex;
-            color: black;
+            color: cyan;
             justify-content: center;
             align-items: center;
             gap: 10px; /* Space between values */
@@ -178,7 +177,7 @@
             font-size: 1em;
             margin-top: 25px;
             margin-bottom: 5px;
-            color: black;
+            color: cyan;
         }
 
         .temperature-container h3{
@@ -227,7 +226,7 @@
             flex: 1;
             height: 173px; /* Set a consistent height */
             width: 100%;
-            background-color: #e5e5e5   ;
+            background-color: #1c3e5e;
             padding: 15px;
             box-sizing: border-box;
             position: relative;
@@ -284,8 +283,28 @@
             vertical-align: middle;  /* Align image vertically with the text */
             color: #40e0a6;
         }
+        .bottom-container {
+            background-color: #0c2a47;
+            display: flex; /* Use flexbox to align items in a row */
+            justify-content: space-between; /* Space between the containers */
+            align-items: center; /* Align both containers vertically at the center */
+            gap: 10px; /* Add spacing between the containers */
+            padding: 0px; /* Add padding around the entire container */
+            height: auto; /* Adjust height dynamically to fit content */
+        }
+
+        .icon-container {
+            flex: 1; /* Adjust width proportionally */
+            background-color: #1c3e5e;
+            text-align: center;
+            display: flex; /* Use flexbox for internal alignment */
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Center content vertically */
+        }
+
         .alert-container {
-            background-color: #cccccc;
+            flex: 1;
+            background-color: #1c3e5e;
             display: flex; /* Use flexbox to align items in a row */
             justify-content: space-between; /* Add space between the tables */
             align-items: flex-start; /* Align tables to the top */
@@ -294,17 +313,16 @@
         }
 
         .alert-table {
-            flex: 1; /* Make all tables equal width */
-            background-color: #cccccc;
+           flex: 1;
+            background-color: #1c3e5e;
             color: white;
-            border: 1px solid #cccccc;
         }
 
-        .alert-table td h3 {
+        .alert-table h3 {
             text-align: center;
             color: rgb(136, 136, 136);
-            margin: 8px 0;
-            font-size: 1.2em;
+            margin: 5px 5px;
+            font-size: 1.4em;
         }
 
         .alert-table table {
@@ -313,81 +331,74 @@
         }
 
         .alert-table td {
-            padding: 15px;
-            background-color: #cccccc;
+            padding: 14px;
+            background-color: #1c3e5e;
             font-size: 1.5em;
             color: red;
             text-align: center;
         }
 
+        #icon-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .icon-table td {
+            padding: 9.5px;
+            color: red;
+            text-align: center;
+        }
+
+        #icons img {
+            width: 80px; /* Adjust the size of icons */
+            height: 80px;
+            object-fit: contain;
+        }
+
         #icons {
-            display: flex; /* Align tables side by side */
-            justify-content: space-between; /* Add space between the tables */
-            gap: 0px; /* Optional: Add consistent spacing */
-        }
+                display: flex; /* Align tables side by side */
+                justify-content: space-between; /* Add space between the tables */
+                gap: 120px; /* Optional: Add consistent spacing */
+            }
 
-        #icons table {
-            flex: 1; /* Make both tables occupy equal width */
-            height: 200px; /* Increase table height */
-            border-collapse: collapse; /* Optional: Collapse table borders */
-            text-align: center; /* Center table content */
-            color: white; /* Set font color */
-            
-        }
 
-        #icons td {
-            vertical-align: middle; /* Center-align content vertically */
-            font-size: 1.5em; /* Increase font size if necessary */
-            padding: 10px; /* Add padding for better spacing */
-            background-color: #c6c6c6;
-        }
 
         /* Sneeze/Cough Alerts - Yellow Background */
         .yellow-alert td {
-            background-color: #005679;
+            background-color: #1c3e5e;
             color: yellow;
         }
 
         /* Eating/Drinking Alerts - Orange Background */
         .orange-alert td {
-            background-color:#005679;
+            background-color:#1c3e5e;
             color: rgb(255, 183, 50);
             
         }
 
         /* Vital Alerts - Dynamic Colors */
         .red-alert td {
-            background-color: #005679;
+            background-color: #1c3e5e;
             color:red;
           
         }
 
         .green-alert td {
-            background-color:#005679;
+            background-color:#1c3e5e;
             color: greenyellow;
             
         }
 
         .yellow-alert td {
-            background-color: #005679;
+            background-color: #1c3e5e;
             color: yellow;
             
         }
 
         .default-alert td {
-            background-color: #005679;
+            background-color: #1c3e5e;
             color: grey;
            
-        }
-        #vital-alert-table {
-            flex: 2; /* Increase width */
-            max-width: 50%; /* Set maximum width for larger table */
-        }
-
-        #icons img{
-            width: 80px; /* Set the desired width */
-            height: 80px; /* Set the desired height */
-            object-fit: contain; /* Ensures the image maintains its aspect ratio */
         }
 
     </style>
@@ -399,7 +410,7 @@
 <body>
 <div class="main-container">
     <div class="patient-data-row">
-    <img src="images/1.png" alt="Glide logo" class="logo">
+    <img src="images/glide.png" alt="Glide logo" class="logo">
         <!-- Patient Data Container -->
         <div class="patient-data-container">
             
@@ -523,36 +534,43 @@
             <div class="graph-row">
                 <div class="graph-container">
                     <canvas id="ppgChart"></canvas>
-                </div>
-                
+                </div>    
             </div>        
-            <div class="alert-container">
-                <div class="alert-table" id="icons">
-                    <table>
-                        <tr><td id="icon1"><img src="images/s1.png" alt="sneeze" class="snneze"></td></tr>
-                        
-                        <tr><td></td></tr>
-                        <tr><td id="icon2"><img src="images/c1.png" alt="cough" class="cough"></td></tr>
-                    </table>
-                    <table>   
-                        <tr><td id="icon3"><img src="images/d1.png" alt="drink" class="drinking"></td></tr>
-                        <!-- <tr><td id="icon3" class="fa">&#xf7a0;</td></tr> -->
-                        <tr><td></td></tr>
-                        <!-- <tr><td id="icon4" class="fa">&#xf5d1;</td></tr> -->
-                        <tr><td id="icon4"><img src="images/e1.png" alt="eat" class="eating"></td></tr>
-                    </table>
-                </div>
-                <div class="alert-table" id="vital-alert-table">
-                    <h3 style="color: white; text-align: center;">Notifications</h3> 
-                    <table>
-                        <tbody id="alert-table-body">
-                            <!-- Alerts will be dynamically added here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div> 
+            <div class="bottom-container">
+            
+                <div class="icon-container">
+                    <div class="icon-table" id="icons">
+                        <table>
+                            <tr><td id="icon1"><img src="images/s1.png" alt="sneeze" class="snneze"></td></tr>
+                            
+                            <tr><td></td></tr>
+                            <tr><td id="icon2"><img src="images/c1.png" alt="cough" class="cough"></td></tr>
+                        </table>
+                        <table>   
+                            <tr><td id="icon3"><img src="images/d1.png" alt="drink" class="drinking"></td></tr>
+                            <!-- <tr><td id="icon3" class="fa">&#xf7a0;</td></tr> -->
+                            <tr><td></td></tr>
+                            <!-- <tr><td id="icon4" class="fa">&#xf5d1;</td></tr> -->
+                            <tr><td id="icon4"><img src="images/e1.png" alt="eat" class="eating"></td></tr>
+                        </table>
+                    </div>
+                </div> 
+                
+                <div class="alert-container">
+                   
+                    <div class="alert-table" id="vital-alert-table">
+                        <h3>Notifications</h3>
+                            <table>
+                                <tbody id="alert-table-body">
+                                    <!-- Alerts will be dynamically added here -->
+                                </tbody>
+                            </table>
+                    </div>
+                </div>    
+            </div>
         </div>
     </div>
+</div>
 
    
     
@@ -801,7 +819,7 @@ const chartOptions = {
                 boxHeight: 1,
                 padding: 10, // Adds padding between legend items
                 usePointStyle: false,// Displays legend items as inline symbols
-                // color: 'black', // White label color
+                 // White label color
                     font: {
                         size: 14, // Font size
                         weight: 'bold', // Bold font weight
@@ -893,7 +911,7 @@ function updateChartData(chart, dataset, value) {
 // Function to fetch and display vital data
 async function fetchVitalData() {
     try {
-        const response = await fetch('http://192.168.6.160:8000/data');
+        const response = await fetch('http://192.168.0.103:8000/data');
         const data = await response.json();
         if (data.length > 0) {
             const latestData = data[data.length - 1];
@@ -919,7 +937,7 @@ async function fetchVitalData() {
 async function loadConfig() {
     try {
         // Fetch the thresholds data from Flask
-        const response = await fetch('http://192.168.6.160:8000/config');
+        const response = await fetch('http://192.168.0.103:8000/config');
         const config = await response.json();
 
         // Update min and max thresholds in the UI

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CES-2025</title>
+    <link rel="icon" type="image/x-icon" sizes="180x180"  href="images/logo.png">
+    <link rel="stylesheet" href="grey.css">
+        
+    
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+</head>
+<body>
+<div class="main-container">
+    <div class="patient-data-row">
+    <img src="images/glide.png" alt="Glide logo" class="logo">
+        <!-- Patient Data Container -->
+        <div class="patient-data-container">
+            
+            <table class="patient-data-table">
+                <tr>
+                    <td><strong>Patient ID:</strong> 12345</td>
+                    <td><strong>Name:</strong> John Doe</td>
+                    <td><strong>Sex:</strong> Male</td>
+                    <td><strong>Age:</strong> 25</td>
+                    <td><strong>Height:</strong> 170 cm</td>
+                    <td><strong>Weight:</strong> 51.2 kg</td>
+                    <td><strong>BMI</strong> 17.7 kg/m2</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+        <!-- Content Section -->
+    <div class="content-container">
+            <!-- Left Container -->
+            <div class="left-container">
+               
+                <!-- Video -->
+                <div class="video-container">
+                    <video id="videoPlayer" src="images/final1.mp4" controls autoplay muted loop></video>
+                </div>
+                 
+            </div>
+
+            <!-- Right Container -->
+             
+        <div class="right-container">
+            <div class="vital-top-row">
+                <div class="temperature-container">
+                    <h3>Temperature (°C)<span style="font-size:30px; padding:5px;">&#x1F321;</span></h3>
+                    <div class="temperature-values">
+                        <div class="temperature-row">
+                            <table>
+                                <tr>
+                                    <td id="temperature-max">--</td> <!-- Display max temperature -->
+                                </tr>
+                               
+                                <tr><td id="temperature-min">--</td></tr> <!-- Display min temperature -->
+                            </table>
+                            <table>
+                                <tr>
+                                    <td ></td> 
+                                    <td id="temperature-value">--</td> <!-- Display the current temperature -->
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class= "spo2-container">
+                    <h3>SpO2 (%)<img src="images/O2.png" alt="O2 logo" class="logo"></h3>
+                    <div class="spo2-row">
+                        <table>
+                            <tr>
+                                <td id="spo2-max">--</td>
+                            </tr>
+                            <tr><td id="spo2-min">--</td></tr>
+                        </table>
+                        <table>
+                            <tr><td></td></tr>
+                            <tr>
+                                <td id="spo2-value">--</td>
+                            </tr>
+                            <tr><td></td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="heart-rate-container">
+                    <h3>HR (bpm) <img src="images/HR.png" alt="HR logo" class="logo"></h3>
+                    <div class="HR-row">
+                           <table>
+                            <tr>
+                                <td id="HR-max">--</td>
+                                
+                            </tr>
+                     
+                            <tr><td id="HR-min">--</td></tr>
+                        </table>
+                        <table>
+                            <tr><td></td></tr>
+                            <tr>
+                                <td id="HR-value">--</td>
+                            </tr>
+                            <tr><td ></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+                <!-- <div class="history-container">
+                    <h3>Complaints</h3>
+                    <div class="history-table">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Palpitations/ racing heart</td>
+                                </tr>
+                                <tr>
+                                    <td>Persistent Fever</td>
+                                </tr>
+                                <tr>
+                                    <td>Fatigue due to persistent coughing or sneezing</td>
+                                </tr>
+                                <tr>
+                                    <td>Difficulty swallowing or frequent choking</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> -->
+                
+            <div class="graph-row">
+                <div class="graph-container">
+                    <canvas id="ecgChart"></canvas>
+                </div>
+                
+            </div>   
+            <div class="graph-row">
+                <div class="graph-container">
+                    <canvas id="ppgChart"></canvas>
+                </div>
+                
+            </div>        
+        <div class="bottom-container">
+            
+            <div class="icon-container">
+                <div class="icon-table" id="icons">
+                    <table>
+                        <tr><td id="icon1"><img src="images/s1.png" alt="sneeze" class="snneze"></td></tr>
+                        
+                        <tr><td></td></tr>
+                        <tr><td id="icon2"><img src="images/c1.png" alt="cough" class="cough"></td></tr>
+                    </table>
+                    <table>   
+                        <tr><td id="icon3"><img src="images/d1.png" alt="drink" class="drinking"></td></tr>
+                        <!-- <tr><td id="icon3" class="fa">&#xf7a0;</td></tr> -->
+                        <tr><td></td></tr>
+                        <!-- <tr><td id="icon4" class="fa">&#xf5d1;</td></tr> -->
+                        <tr><td id="icon4"><img src="images/e1.png" alt="eat" class="eating"></td></tr>
+                    </table>
+                </div>
+            </div> 
+            
+            <div class="alert-container">
+               
+                <div class="alert-table" id="vital-alert-table">
+                    <h3>Notifications</h3>
+                        <table>
+                            <tbody id="alert-table-body">
+                                <!-- Alerts will be dynamically added here -->
+                            </tbody>
+                        </table>
+                </div>
+            </div>    
+        </div>
+            
+    </div>
+</div>
+
+<script src="grey.js"></script>
+    
+</body>
+</html>
